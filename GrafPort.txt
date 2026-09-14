@@ -1,0 +1,34 @@
+struct GrafPort {
+	short							device;
+	BitMap							portBits;
+	Rect							portRect;
+	RgnHandle						visRgn;
+	RgnHandle						clipRgn;
+	Pattern							bkPat;
+	Pattern							fillPat;
+	Point							pnLoc;
+	Point							pnSize;
+	short							pnMode;
+#ifdef __LATITUDE_LONG_ALIGNED__
+    /*
+     * Add filler to align GrafPort.pnVis with CGrafPort.pnVis
+     */
+    short filler1;
+#endif
+	Pattern							pnPat;
+	short							pnVis;
+	short							txFont;
+	Style							txFace;						/*txFace is unpacked byte but push as short*/
+	SInt8							filler;
+	short							txMode;
+	short							txSize;
+	Fixed							spExtra;
+	long							fgColor;
+	long							bkColor;
+	short							colrBit;
+	short							patStretch;
+	Handle							picSave;
+	Handle							rgnSave;
+	Handle							polySave;
+	QDProcsPtr						grafProcs;
+};

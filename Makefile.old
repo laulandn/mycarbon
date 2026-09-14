@@ -1,0 +1,207 @@
+
+####################################################################
+# Makefile
+####################################################################
+
+PATH_TO_BASE=.
+
+include $(PATH_TO_BASE)/../Makefile.target
+include $(PATH_TO_BASE)/../Makefile.common
+
+EXTRAINC=-I$(PATH_TO_BASE)
+EXTRALIB=-L$(PATH_TO_BASE)
+
+
+####################################################################
+# Our objects 
+####################################################################
+
+DIRS=$(wildcard */)
+
+
+####################################################################
+# The libraries and programs 
+####################################################################
+
+SIMPLE_PROGRAMS1=nlines ntelnet nupac npictinfo nv nwire nbininfo test
+SIMPLE_PROGRAMS=$(SIMPLE_PROGRAMS1) $(SIMPLE_PROGRAMS2)
+PROGRAMS=$(SIMPLE_PROGRAMS) nemu
+
+BASE_PATHS=$(ELIB_PATH)
+OTHER_PATHS=$(CPULIB_PATH) $(DISKLIB_PATH) $(EMU_PATH) $(BINARYLIB_PATH)
+OTHER_L=$(EMU_L) $(DISKLIB_L) $(CPULIB_L) $(BINARYLIB_L)
+BASE_L=$(ELIB_L)
+
+
+####################################################################
+# The libraries
+####################################################################
+
+# Okay, when I just had one or two libraries, this was a decent
+# way to do things, but NOW its ridiculous!
+# Need to implement a better way: based on directory names
+
+ALIB_NAME=alib_static
+ALIB_L=-Lalib -l$(ALIB_NAME)
+ALIB_LIB=lib$(ALIB_NAME).$(AFILE)
+ALIB_PATH=$(PATH_TO_BASE)/alib/$(ALIB_LIB)
+
+GUILIB_NAME=guilib_static
+GUILIB_L=-Lguilib -l$(GUILIB_NAME)
+GUILIB_LIB=lib$(GUILIB_NAME).$(AFILE)
+GUILIB_PATH=$(PATH_TO_BASE)/guilib/$(GUILIB_LIB)
+
+A3DLIB_NAME=a3dlib_static
+A3DLIB_L=-La3dlib -l$(A3DLIB_NAME)
+A3DLIB_LIB=lib$(A3DLIB_NAME).$(AFILE)
+A3DLIB_PATH=$(PATH_TO_BASE)/a3dlib/$(A3DLIB_LIB)
+
+DECODERLIB_NAME=decoderlib_static
+DECODERLIB_L=-Ldecoderlib -l$(DECODERLIB_NAME)
+DECODERLIB_LIB=lib$(DECODERLIB_NAME).$(AFILE)
+DECODERLIB_PATH=$(PATH_TO_BASE)/decoderlib/$(DECODERLIB_LIB)
+
+NETLIB_NAME=netlib_static
+NETLIB_L=-Lnetlib -l$(NETLIB_NAME)
+NETLIB_LIB=lib$(NETLIB_NAME).$(AFILE)
+NETLIB_PATH=$(PATH_TO_BASE)/netlib/$(NETLIB_LIB)
+
+SOUNDLIB_NAME=soundlib_static
+SOUNDLIB_L=-Lsoundlib -l$(SOUNDLIB_NAME)
+SOUNDLIB_LIB=lib$(SOUNDLIB_NAME).$(AFILE)
+SOUNDLIB_PATH=$(PATH_TO_BASE)/soundlib/$(SOUNDLIB_LIB)
+
+ELIB_NAME=elib_static
+ELIB_L=-Lelib -l$(ELIB_NAME)
+ELIB_LIB=lib$(ELIB_NAME).$(AFILE)
+ELIB_PATH=$(PATH_TO_BASE)/elib/$(ELIB_LIB)
+
+CPULIB_NAME=cpulib_static
+CPULIB_L=-Lcpulib -l$(CPULIB_NAME)
+CPULIB_LIB=lib$(CPULIB_NAME).$(AFILE)
+CPULIB_PATH=$(PATH_TO_BASE)/cpulib/$(CPULIB_LIB)
+
+DISKLIB_NAME=disklib_static
+DISKLIB_L=-Ldisklib -l$(DISKLIB_NAME)
+DISKLIB_LIB=lib$(DISKLIB_NAME).$(AFILE)
+DISKLIB_PATH=$(PATH_TO_BASE)/disklib/$(DISKLIB_LIB)
+
+EMU_NAME=emu_static
+EMU_L=-Lemu -l$(EMU_NAME)
+EMU_LIB=lib$(EMU_NAME).$(AFILE)
+EMU_PATH=$(PATH_TO_BASE)/emu/$(EMU_LIB)
+
+BINARYLIB_NAME=binarylib_static
+BINARYLIB_L=-Lbinarylib -l$(BINARYLIB_NAME)
+BINARYLIB_LIB=lib$(BINARYLIB_NAME).$(AFILE)
+BINARYLIB_PATH=$(PATH_TO_BASE)/binarylib/$(BINARYLIB_LIB)
+
+
+ifeq ($(MSVC),yes)
+	ALIB_L=$(ALIB_PATH)
+	GUILIB_L=$(GUILIB_PATH)
+	A3DLIB_L=$(A3DLIB_PATH)
+	DECODERLIB_L=$(DECODERLIB_PATH)
+	NETLIB_L=$(NETLIB_PATH)
+	SOUNDLIB_L=$(SOUNDLIB_PATH)
+	ELIB_L=$(ELIB_PATH)
+	CPULIB_L=$(CPULIB_PATH)
+	DISKLIB_L=$(DISKLIB_PATH)
+	EMU_L=$(EMU_PATH)
+	BINARYLIB_L=$(BINARYLIB_PATH)
+endif
+
+
+####################################################################
+# The targets 
+####################################################################
+
+all:
+	$(foreach DIR,$(DIRS),$(MAKE) -i -C $(DIR) all;)
+	$(MAKE) -i $(PROGRAMS)
+
+
+all_libs: base_libs
+	$(MAKE) -i -C elib all
+	$(MAKE) -i -C emu all
+	$(MAKE) -i -C cpulib all
+	$(MAKE) -i -C disklib all
+	$(MAKE) -i -C binarylib all
+
+
+base_libs:
+	$(MAKE) -i -C rsrc all
+	$(MAKE) -i -C alib all
+	$(MAKE) -i -C guilib all
+	$(MAKE) -i -C a3dlib all
+	$(MAKE) -i -C decoderlib all
+	$(MAKE) -i -C soundlib all
+	$(MAKE) -i -C netlib all
+
+
+
+clean:
+	rm -rf *.$(OFILE) *.$(AFILE) *.s *.bak *.log map.f build *Data *.pdb
+	rm -rf $(PROGRAMS) *.html *.exe *.exe.so *68k *.SYM .DS_Store *.ilk
+	rm -rf .gdb_history .nautilus-metafile.xml
+	rm -rf ._* */._* */*/._* */*/*/._*
+	rm -rf *~ */*~ */*/*~ */*/*/*~
+# Libraries...
+	$(foreach DIR,$(DIRS),$(MAKE) -i -C $(DIR) clean;)
+
+
+fix: fix_perm fix_type
+# Libraries...
+	$(foreach DIR,$(DIRS),$(MAKE) -i -C $(DIR) fix;)
+
+
+# The different Libraries and Programs...
+
+nlines: base_libs nlines.$(OFILE)
+	$(CLXX) $(LDFLAGS) -o nlines nlines.$(OFILE) $(GUILIB_L) $(ALIB_L) $(DECODERLIB_L) $(LIBS)
+
+ntelnet: base_libs $(NETLIB_PATH) ntelnet.$(OFILE)
+	$(CLXX) $(LDFLAGS) -o ntelnet ntelnet.$(OFILE) $(GUILIB_L) $(ALIB_L) $(DECODERLIB_L) $(NETLIB_L) $(LIBS)
+
+nupac: base_libs nupac.$(OFILE)
+	$(CLXX) $(LDFLAGS) -o nupac nupac.$(OFILE) $(GUILIB_L) $(ALIB_L) $(DECODERLIB_L) $(LIBS)
+
+nv: base_libs nv.$(OFILE)
+	$(CLXX) $(LDFLAGS) -o nv nv.$(OFILE) $(GUILIB_L) $(ALIB_L) $(DECODERLIB_L) $(SOUNDLIB_L) $(LIBS)
+
+npictinfo: base_libs npictinfo.$(OFILE)
+	$(CLXX) $(LDFLAGS) -o npictinfo npictinfo.$(OFILE) $(GUILIB_L) $(ALIB_L) $(DECODERLIB_L) $(LIBS)
+
+nbininfo: base_libs nbininfo.$(OFILE)
+	$(CLXX) $(LDFLAGS) -o nbininfo nbininfo.$(OFILE) $(OTHER_L) $(BASE_L) $(GUILIB_L) $(ALIB_L) $(DECODERLIB_L) $(LIBS)
+
+nwire: base_libs $(A3DLIB_PATH) nwire.$(OFILE)
+	$(CLXX) $(LDFLAGS) -o nwire nwire.$(OFILE) $(GUILIB_L) $(ALIB_L) $(DECODERLIB_L) $(A3DLIB_L) $(LIBS)
+
+test: base_libs $(A3DLIB_PATH) test.$(OFILE)
+	$(CLXX) $(LDFLAGS) -o test test.$(OFILE) $(ALIB_L) $(GUILIB_L) $(ALIB_L) $(A3DLIB_L) $(LIBS) $(GUILIB_L) $(DECODERLIB_L) $(ALIB_L) $(PLATFORMLIB_L)
+
+nemu: base_libs nemu.$(OFILE) nemu2.$(OFILE) ncmd.$(OFILE) all_libs
+	$(CLXX) $(LDFLAGS) -o nemu nemu.$(OFILE) nemu2.$(OFILE) ncmd.$(OFILE) $(OTHER_L) $(BASE_L) $(GUILIB_L) $(ALIB_L) $(DECODERLIB_L) $(SOUNDLIB_L) $(LIBS)
+
+
+# dependencies
+# NOTE: its ok to see errors when running makedepend
+depend:
+	makedepend $(DEPENDFLAGS) *.cpp
+# Libraries...
+	$(foreach DIR,$(DIRS),$(MAKE) -i -C $(DIR) depend;)
+
+
+remove_depends:
+	rm -f Makefile.dep
+	touch Makefile.dep
+# Libraries...
+	$(foreach DIR,$(DIRS),$(MAKE) -ik -C $(DIR) remove_depends;)
+
+
+include $(PATH_TO_BASE)/Makefile.tail
+
+include Makefile.dep
+
+

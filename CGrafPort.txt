@@ -1,0 +1,34 @@
+struct CGrafPort {
+	short							device;
+	PixMapHandle					portPixMap;					/*port's pixel map*/
+	short							portVersion;				/*high 2 bits always set*/
+	Handle							grafVars;					/*Handle to more fields*/
+	short							chExtra;					/*character extra*/
+	short							pnLocHFrac;					/*pen fraction*/
+	Rect							portRect;
+	RgnHandle						visRgn;
+	RgnHandle						clipRgn;
+	PixPatHandle					bkPixPat;					/*background pattern*/
+	RGBColor						rgbFgColor;					/*RGB components of fg*/
+	RGBColor						rgbBkColor;					/*RGB components of bk*/
+	Point							pnLoc;
+	Point							pnSize;
+	short							pnMode;
+	PixPatHandle					pnPixPat;					/*pen's pattern*/
+	PixPatHandle					fillPixPat;					/*fill pattern*/
+	short							pnVis;
+	short							txFont;
+	Style							txFace;						/*txFace is unpacked byte  push as short*/
+	SInt8							filler;
+	short							txMode;
+	short							txSize;
+	Fixed							spExtra;
+	long							fgColor;
+	long							bkColor;
+	short							colrBit;
+	short							patStretch;
+	Handle							picSave;
+	Handle							rgnSave;
+	Handle							polySave;
+	CQDProcsPtr						grafProcs;
+};

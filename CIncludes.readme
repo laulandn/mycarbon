@@ -1,0 +1,8 @@
+CIncludes
+---------
+
+These are from Metrowerks/Codewarrior Lattitude, not sure dr1 or dr2...
+
+I made some minor changes to handle name collisions.
+There definitely were for X11 which is what is the only platform I tested.
+There might have been some with nlib too.
