@@ -1,0 +1,24 @@
+**********************************
+NLIB DEBUG OUTPUT BEGINS
+NLIB version: 17.9
+NOTE: sizeof(long)==8
+NOTE: sizeof(char *)==8
+NOTE: _LP64 is set!
+NOTE: __LP64__ is set!
+NOTE: __WORDSIZE == 64!
+byteOrder tester=34 (little-endian)
+****
+****
+os "Unix-variant" version: 0.0
+Args:
+init_fonts() called...
+Requesting display: 0x0x0
+Going to XOpenDisplay...
+*** mycarbon'GetDateTime()' not implemented!
+boundsRect Rect is t,b,l,r 50,1034,50,1678
+n_palette dump:
+256 colors 24-bit mapper score 
+theMacCWindow.port.portRect Rect is t,b,l,r 0,984,0,1628
+keycode 64
+keycode 63
+keycode 63
